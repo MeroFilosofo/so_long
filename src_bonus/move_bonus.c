@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   move.c                                             :+:      :+:    :+:   */
+/*   move_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 01:22:55 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 19:08:49 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/01/26 19:09:08 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/so_long.h"
+#include "../headers/so_long_bonus.h"
 
 int	key_hook(int keycode, t_game *game)
 {
@@ -34,7 +34,6 @@ int	key_hook(int keycode, t_game *game)
 		on_close(game);
 	return (0);
 }
-
 
 int	move_player(t_game *game, int x, int y)
 {
