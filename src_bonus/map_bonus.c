@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 01:29:01 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 18:57:35 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/01/29 15:10:07 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	elements_map(t_game *game, t_test *test)
 		j = -1;
 		while (++j < game->map_width)
 		{
-			if (!ft_strrchr("10CPE", game->map[i][j]))
+			if (!ft_strrchr("10CPEB", game->map[i][j]))
 				return (ft_printf("Error\nCaracteres no validos\n"), 0);
 			if (game->map[i][j] == 'P')
 			{

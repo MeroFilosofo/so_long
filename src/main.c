@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 20:09:06 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 16:39:38 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:00:29 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,10 @@ int	main(int argc, char **argv)
 	game->map_height = 0;
 	game->map = NULL;
 	if (!load_map(game, argv[1]))
-	{
-		free_map(game);
-		free(game);
-		return (1);
-	}
+		return (free_map(game), free(game), 1);
 	game->mlx = mlx_init();
-	load_textures(game);
+	if (!load_textures (game))
+		return (free_map(game), free_textures(game), free(game), 1);
 	init(game);
 	map_paint(game);
 	paint_player(game);

@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 20:34:59 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 18:55:44 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:05:56 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,15 @@ typedef struct s_game
 	void		*floor;
 	void		*collect;
 	void		*exit;
-	void		*player;
+	void		*exit_open;
+	void		*enemy;
+
+	void		**player[4][4];
+
+	size_t		frames;
+	size_t		player_sprite;
+	size_t		player_frame;
+	size_t		player_direction;
 
 	size_t		sprite_size;
 	size_t		map_width;
@@ -58,6 +66,7 @@ typedef struct s_game
 	size_t		player_offset;
 	size_t		collect_offset;
 	size_t		exit_offset;
+	size_t		enemy_offset;
 	size_t		x_pos;
 	size_t		y_pos;
 	size_t		moves;
@@ -65,7 +74,7 @@ typedef struct s_game
 
 int		key_hook(int keycode, t_game *game);
 int		on_close(t_game *game);
-int		move_player(t_game *game, int x, int y);
+int		move_player(t_game *game, int x, int y, int direction);
 int		init(t_game *game);
 int		move(t_game *game, int keycode);
 void	print_info(t_game *game, int moved);
@@ -84,5 +93,12 @@ int		*char_position(t_game *game, char c);
 int		test_fill(t_game *game, t_test *test);
 int		load_textures(t_game *game);
 void	map_paint(t_game *game);
+
+//Bonus
+void	random_move_enemy(t_game *game);
+void	move_enemy(t_game *game, size_t x, size_t y, size_t direction);
+int		update_screen(t_game *game);
+int		load_textures(t_game *g);
+void	free_textures(t_game *game);
 
 #endif

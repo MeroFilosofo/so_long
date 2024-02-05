@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 13:22:34 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/19 13:42:19 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:10:33 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,13 @@ void				ft_putstrcnt(char *s, int *count);
 void				ft_putnbrcnt(long n, int *count);
 void				ft_puthexcnt(unsigned long int n, int ucase,
 						int prefix, int *count);
+
+/*
+**
+**      Mis funciones
+**
+*/
+
+char				*ft_strjoinfree(char *s1, char *s2);
 
 #endif

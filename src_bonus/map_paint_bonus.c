@@ -6,81 +6,108 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 01:28:08 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 18:57:43 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:15:52 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/so_long_bonus.h"
 
-int	load_textures(t_game *game)
-{
-	int	width;
-	int	height;
-
-	game->wall = mlx_xpm_file_to_image(game->mlx, "textures/wall.xpm", &width,
-			&height);
-	game->sprite_size = width;
-	game->player = mlx_xpm_file_to_image(game->mlx, "textures/zombie.xpm",
-			&width, &height);
-	game->player_offset = (game->sprite_size - width) / 2;
-	game->floor = mlx_xpm_file_to_image(game->mlx, "./textures/floor.xpm",
-			&width, &height);
-	game->collect = mlx_xpm_file_to_image(game->mlx, "textures/cerebro.xpm",
-			&width, &height);
-	game->collect_offset = (game->sprite_size - width) / 2;
-	game->exit = mlx_xpm_file_to_image(game->mlx, "./textures/door.xpm", &width,
-			&height);
-	game->exit_offset = (game->sprite_size - width) / 2;
-	return (0);
-}
-
-void	free_textures(t_game *game)
-{
-	mlx_destroy_image(game->mlx, game->wall);
-	mlx_destroy_image(game->mlx, game->player);
-	mlx_destroy_image(game->mlx, game->floor);
-	mlx_destroy_image(game->mlx, game->collect);
-	mlx_destroy_image(game->mlx, game->exit);
-}
-
 void	paint_player(t_game *game)
 {
-	mlx_put_image_to_window(game->mlx, game->window, game->player, game->x_pos
-		* game->sprite_size + game->player_offset, game->y_pos
-		* game->sprite_size + game->player_offset);
+	size_t	frame_offset;
+	size_t	x_offset;
+	size_t	y_offset;
+
+	x_offset = 0;
+	y_offset = 0;
+	frame_offset = game->sprite_size - ((game->sprite_size / 4)
+			* game->player_frame++);
+	if (game->player_direction == 0)
+		y_offset = frame_offset;
+	if (game->player_direction == 1)
+		x_offset = -frame_offset;
+	if (game->player_direction == 3)
+		x_offset = frame_offset;
+	if (game->player_direction == 2)
+		y_offset = -frame_offset;
+	mlx_put_image_to_window(game->mlx, game->window,
+		game->player[game->player_direction][game->player_sprite++],
+		game->x_pos * game->sprite_size + game->player_offset + x_offset,
+		game->y_pos * game->sprite_size + game->player_offset + y_offset);
+	if (game->player_sprite == 4)
+		game->player_sprite = 0;
+	if (game->player_frame == 5)
+		game->player_frame = 4;
 }
 
 void	print_info(t_game *game, int moved)
 {
+	char	*str;
+	char	*moves;
+
+	moves = ft_itoa(game->moves);
+	str = ft_strjoin("Moves: ", moves);
+	mlx_string_put(game->mlx, game->window, 16, 32, 0x00FFFFFF, str);
+	free(str);
+	free(moves);
 	if (moved)
 		ft_printf("Moves: %d\n", game->moves);
+}
+
+void	paint_element(t_game *game, int x, int y)
+{
+	int		offset;
+	void	*sprite;
+
+	offset = 0;
+	if (game->map[y][x] == '1')
+		sprite = game->wall;
+	if (game->map[y][x] == 'C')
+		sprite = game->collect;
+	if (game->map[y][x] == 'C')
+		offset = game->collect_offset;
+	if (game->map[y][x] == '0')
+		sprite = game->floor;
+	if (game->map[y][x] == 'E')
+		sprite = game->exit;
+	if (game->map[y][x] == 'E' && game->collectibles == 0)
+		sprite = game->exit_open;
+	if (game->map[y][x] == 'E')
+		offset = game->exit_offset;
+	if (game->map[y][x] == 'B')
+	{
+		sprite = game->enemy;
+		offset = game->enemy_offset;
+	}
+	mlx_put_image_to_window(game->mlx, game->window, sprite, x
+		* game->sprite_size + offset, y * game->sprite_size + offset);
 }
 
 void	map_paint(t_game *g)
 {
 	size_t	i;
 	size_t	j;
-	size_t	size;
 
-	size = g->sprite_size;
 	i = -1;
 	while (++i < g->map_height)
 	{
 		j = -1;
 		while (++j < g->map_width)
-		{
-			if (g->map[i][j] == '1')
-				mlx_put_image_to_window(g->mlx, g->window, g->wall, j * size, i
-					* size);
-			if (g->map[i][j] == 'C')
-				mlx_put_image_to_window(g->mlx, g->window, g->collect, j * size
-					+ g->collect_offset, i * size + g->collect_offset);
-			if (g->map[i][j] == '0')
-				mlx_put_image_to_window(g->mlx, g->window, g->floor, j * size, i
-					* size);
-			if (g->map[i][j] == 'E')
-				mlx_put_image_to_window(g->mlx, g->window, g->exit, j * size
-					+ g->exit_offset, i * size + g->exit_offset);
-		}
+			paint_element(g, j, i);
 	}
+}
+
+int	update_screen(t_game *game)
+{
+	if (++game->frames % 1000 == 0)
+	{
+		map_paint(game);
+		paint_player(game);
+		print_info(game, 0);
+		if (game->frames % 4000 == 0)
+			random_move_enemy(game);
+	}
+	if (game->frames == 1000000)
+		game->frames = 0;
+	return (0);
 }

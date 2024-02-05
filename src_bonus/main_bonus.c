@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 20:09:06 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 18:57:28 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:01:30 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	p_error(int error)
 	else if (error == 3)
 		ft_printf("Error\nMapa con linea vacia\n");
 	else if (error == 4)
-		ft_printf("Error\nMapa no rectangular\n");
+		ft_printf("Error\nEl mapa no es rectangular\n");
 	else if (error == 5)
 		ft_printf("Error\nEl mapa no esta cerrado\n");
 	else
@@ -48,7 +48,12 @@ int	init(t_game *game)
 			"Come-Cocos");
 	mlx_hook(game->window, 17, 0, on_close, game);
 	mlx_key_hook(game->window, key_hook, game);
+	mlx_loop_hook(game->mlx, update_screen, game);
 	game->moves = 0;
+	game->player_sprite = 0;
+	game->frames = 0;
+	game->player_frame = 4;
+	game->player_direction = 1;
 	return (0);
 }
 
@@ -77,7 +82,6 @@ int	main(int argc, char **argv)
 	if (!game)
 		return (1);
 	game->map_height = 0;
-	game->map = NULL;
 	if (!load_map(game, argv[1]))
 	{
 		free_map(game);

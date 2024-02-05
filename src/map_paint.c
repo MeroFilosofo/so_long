@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 01:28:08 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 13:41:00 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:04:26 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,24 @@ int	load_textures(t_game *game)
 	game->exit = mlx_xpm_file_to_image(game->mlx, "./textures/door.xpm", &width,
 			&height);
 	game->exit_offset = (game->sprite_size - width) / 2;
-	return (0);
+	if (!game->wall || !game->player || !game->floor || !game->collect
+		|| !game->exit)
+		return (ft_printf("Error\nFalta alguna textura\n"), 0);
+	return (1);
 }
 
 void	free_textures(t_game *game)
 {
-	mlx_destroy_image(game->mlx, game->wall);
-	mlx_destroy_image(game->mlx, game->player);
-	mlx_destroy_image(game->mlx, game->floor);
-	mlx_destroy_image(game->mlx, game->collect);
-	mlx_destroy_image(game->mlx, game->exit);
+	if (game->wall)
+		mlx_destroy_image(game->mlx, game->wall);
+	if (game->player)
+		mlx_destroy_image(game->mlx, game->player);
+	if (game->floor)
+		mlx_destroy_image(game->mlx, game->floor);
+	if (game->collect)
+		mlx_destroy_image(game->mlx, game->collect);
+	if (game->exit)
+		mlx_destroy_image(game->mlx, game->exit);
 }
 
 void	paint_player(t_game *game)

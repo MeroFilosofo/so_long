@@ -6,7 +6,7 @@
 /*   By: ivromero <ivromero@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 00:44:38 by ivromero          #+#    #+#             */
-/*   Updated: 2024/01/26 18:57:39 by ivromero         ###   ########.fr       */
+/*   Updated: 2024/01/29 15:08:09 by ivromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	floodfill(t_game *game, size_t x, size_t y, t_test *test)
 {
 	if (x < 0 || x >= game->map_width || y < 0 || y >= game->map_height)
 		return (0);
-	if (game->map[y][x] == '1' || game->map_filled[y][x] == 'x')
+	if (game->map[y][x] == '1' || game->map[y][x] == 'B'
+		|| game->map_filled[y][x] == 'x')
 		return (0);
 	if (game->map[y][x] == '0')
 		game->map_filled[y][x] = 'x';
